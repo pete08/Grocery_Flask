@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block content %}
+    {% for item in store_items %}
+    <h1>{{ item.title }}</h1>
+    <p>Added by {{ item.author }} on {{item.date_added}}</p>
+    <p>{{item.detail}}</p>
+    {% endfor%}
+{% endblock content %}
