@@ -11,6 +11,11 @@ body {
   .bg-steel {
     background-color: #5f788a;
   }
+
+.nav-item-right{
+    text-align: right;
+}
+
   
   .site-header .navbar-nav .nav-link {
     color: #cbd5db;
