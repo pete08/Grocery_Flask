@@ -1,19 +1,18 @@
-from flask import Flask, render_template, url_for, flash, redirect
-from forms import RegistrationForm, LoginForm
-app = Flask(__name__)
-
-app.config['SECRET_KEY'] = '8cb9a5a7da9bc10f0a315302798154f1'
+from flask import render_template, url_for, flash, redirect
+from grocery import app
+from grocery.forms import RegistrationForm, LoginForm
+from grocery.models import User, Item
 
 store_items = [
     {
         'author': 'Peter Hackley',
-        'title' : 'needed item',
+        'item_name' : 'needed item',
         'detail' : 'brand, count, description',
         'date_added' : 'April 10, 2023',
     },
     {
         'author': 'Jane Doe',
-        'title' : 'Needed Item 2',
+        'item_name' : 'Needed Item 2',
         'detail' : 'Name Brand, x2',
         'date_added' : 'April 11, 2023',
     },
@@ -47,8 +46,3 @@ def login():
         else:
             flash('Login Unsuccessful. Plase check suername and apssword', 'danger')
     return render_template('login.html', title="Log In", form=form)
-
-
-
-if __name__ == '__main__':
-    app.run(debug=True)

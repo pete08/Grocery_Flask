@@ -8,9 +8,9 @@
             <a class="mr-2" href="#">{{ item.author }}</a>
             <small class="text-muted">{{ item.date_added }}</small>
           </div>
-          <h2><a class="article-title" href="#">{{ item.title }}</a></h2>
+          <h2><a class="article-title" href="#">{{ item.item_name }}</a></h2>
           <p class="article-content">{{ item.detail }}</p>
         </div>
-      </article>
+    </article>
     {% endfor %}
 {% endblock content %}
