@@ -2,9 +2,13 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
+from dotenv import load_dotenv
+import os
 
+
+load_dotenv()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = '8cb9a5a7da9bc10f0a315302798154f1'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 # /// -> relative path
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
