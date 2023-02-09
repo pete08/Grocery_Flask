@@ -10,14 +10,14 @@ from flask_login import login_user, logout_user, current_user, login_required
 items = [
     {
         'author': 'Peter Hackley',
-        'title' : 'Let\'s learn',
-        'content' : 'brand, count, description are all things to describe a list with.',
+        'item_name' : 'item 000',
+        'detail' : 'brand, count, description are all things to describe a list with.',
         'date_added' : 'April 10, 2023',
     },
     {
         'author': 'Jane Doe',
-        'title' : 'Jane loves PEaches',
-        'content' : 'on a sprign day in May. There is a lorem, Ipsum. Antem Lorem Lorem.',
+        'item_name' : 'item 1',
+        'detail' : 'on a sprign day in May. There is a lorem, Ipsum. Antem Lorem Lorem.',
         'date_added' : 'April 11, 2023',
     },
 ]

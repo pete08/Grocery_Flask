@@ -21,8 +21,8 @@ class User(db.Model, UserMixin):
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(20), nullable=False)
-    content = db.Column(db.String(60), nullable=False, default='')
+    item_name = db.Column(db.String(20), nullable=False) 
+    detail = db.Column(db.String(60), nullable=False, default='')
     date_added = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
