@@ -8,12 +8,12 @@ from groceryblog.models import User, Item
 from flask_login import login_user, logout_user, current_user, login_required
 
 items = [
-    {
-        'user': 'Peter Hackley',
-        'title' : 'Let\'s learn',
-        'content' : 'brand, count, description are all things to describe a list with.',
-        'date_added' : 'April 10, 2023',
-    },
+    # {
+    #     'user': 'Peter Hackley',
+    #     'title' : 'Let\'s learn',
+    #     'content' : 'brand, count, description are all things to describe a list with.',
+    #     'date_added' : 'April 10, 2023',
+    # },
     {
         'user': 'Jane Doe',
         'title' : 'Jane loves PEaches',
