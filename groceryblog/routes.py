@@ -8,17 +8,17 @@ from groceryblog.models import User, Item
 from flask_login import login_user, logout_user, current_user, login_required
 
 items = [
-    # {
-    #     'user': 'Peter Hackley',
-    #     'title' : 'Let\'s learn',
-    #     'content' : 'brand, count, description are all things to describe a list with.',
-    #     'date_added' : 'April 10, 2023',
-    # },
+    {
+        'user': 'Peter Hackley',
+        'title' : 'goobers game!',
+        'content' : 'brand, count, description are all things to describe a list with.',
+        'date_added' : 'April 69, 2069',
+    },
     {
         'user': 'Jane Doe',
-        'title' : 'Jane loves PEaches',
+        'title' : 'Jafsdasdf aches',
         'content' : 'on a sprign day in May. There is a lorem, Ipsum. Antem Lorem Lorem.',
-        'date_added' : 'April 11, 2023',
+        'date_added' : 'April 11, 2023ffff',
     },
 ]
 
@@ -27,7 +27,7 @@ items = [
 @app.route("/home")
 def home():
     ## flask tutorial Part 8 - Create, Update, Delete Items
-    return render_template('home.html', items = items)
+    return render_template('home.html', items = aslfkj)
 
 @app.route("/about")
 def about():
