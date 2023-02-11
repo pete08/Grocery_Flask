@@ -1,32 +1,34 @@
 import os
 import secrets
 from PIL import Image
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from grocery import app, db, bcrypt
-from grocery.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from grocery.forms import RegistrationForm, LoginForm, UpdateAccountForm, NewItem
 from grocery.models import User, Item
 from flask_login import login_user, logout_user, current_user, login_required
 
-items = [
-    {
-        'author': 'Peter Hackley',
-        'item_name' : 'item 000',
-        'detail' : 'brand, count, description are all things to describe a list with.',
-        'date_added' : 'April 10, 2023',
-    },
-    {
-        'author': 'Jane Doe',
-        'item_name' : 'item 1',
-        'detail' : 'on a sprign day in May. There is a lorem, Ipsum. Antem Lorem Lorem.',
-        'date_added' : 'April 11, 2023',
-    },
-]
+# items = [
+#     {
+#         'author': 'Peter Hackley',
+#         'item_name' : 'item 000',
+#         'detail' : 'brand, count, description are all things to describe a list with.',
+#         'date_added' : 'April 10, 2023',
+#     },
+#     {
+#         'author': 'Jane Doe',
+#         'item_name' : 'item 1',
+#         'detail' : 'on a sprign day in May. There is a lorem, Ipsum. Antem Lorem Lorem.',
+#         'date_added' : 'April 11, 2023',
+#     },
+# ]
 
 
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html', items = items)
+    page = request.args.get('page', 1, type=int)
+    items = Item.query.order_by(Item.user_id.asc()).paginate(page=page, per_page=2)
+    return render_template('home.html', items=items)
 
 @app.route("/about")
 def about():
@@ -99,3 +101,50 @@ def account():
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title="Account", image_file=image_file, form=form)
+
+@app.route("/new", methods=['GET', 'POST'])
+@login_required
+def new_item():
+    form = NewItem()
+    if form.validate_on_submit():
+        post = Item(item_name=form.item_name.data, detail=form.detail.data, user=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your item has been added!', 'success')
+        return redirect(url_for('home'))
+    return render_template('new_item.html', title="New Item", form=form, legend='New Item')
+
+#Consider changing to entire list
+@app.route("/item/<int:item_id>")
+def item(item_id):
+    item = Item.query.get_or_404(item_id)
+    return render_template('item.html', item_name=item.item_name, item=item)
+
+@app.route("/item/<int:item_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_item(item_id):
+    item = Item.query.get_or_404(item_id)
+    if item.user != current_user:
+        abort(403)
+    form = NewItem()
+    if form.validate_on_submit():
+        item.item_name = form.item_name.data
+        item.detail = form.detail.data
+        db.session.commit()
+        flash('Your item has been updated!', 'success')
+        return redirect(url_for('item', item_id=item.id))
+    elif request.method == 'GET':
+        form.item_name.data = item.item_name
+        form.detail.data = item.detail
+    return render_template('new_item.html', title="Update Item", form=form, legend='Update Item')
+
+@app.route("/item/<int:item_id>/delete", methods=['POST'])
+@login_required
+def delete_item(item_id):
+    item = Item.query.get_or_404(item_id)
+    if item.user != current_user:
+        abort(403)
+    db.session.delete(item)
+    db.session.commit()
+    flash('Your item has been deleted!', 'success')
+    return redirect(url_for('home'))

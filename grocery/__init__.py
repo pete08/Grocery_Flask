@@ -19,6 +19,10 @@ from grocery import routes
 # initialize DB
 # CLI for DB creation: $ python3 <--- does not produce a Flask Application Automatic Context: https://flask-sqlalchemy.palletsprojects.com/en/3.0.x/contexts
 # CLI for DB creation: $ flask --app grocery shell <--- produces Flask Application Automatice Context: https://flask.palletsprojects.com/en/2.2.x/cli/#open-a-shell. This "Autoamtic Context" is necessary to populate/test DBs
+# CLI for recreating DBs: 
+#               db.drop_all()
+#               db.create_all()
+# CLI for applying schema modifications to existing DBs: https://www.digitalocean.com/community/tutorials/how-to-use-flask-sqlalchemy-to-interact-with-databases-in-a-flask-application
 #### CLI DBs:
 #### $ flask --app grocery shell
 #### >>> from grocery import db

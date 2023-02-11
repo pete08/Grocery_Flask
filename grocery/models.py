@@ -13,11 +13,12 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='dog_0.jpg')
     password = db.Column(db.String(60), nullable=False)
+    display_public = db.Column(db.Boolean, nullable=False, default=1)
     items = db.relationship('Item', backref='user', lazy=True)
 
     # REPR method
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"User('{self.id}', '{self.username}', '{self.email}', '{self.image_file}', '{self.display_public}')"
 
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,4 +29,4 @@ class Item(db.Model):
 
     # REPR method
     def __repr__(self):
-        return f"Item('{self.item_name}', '{self.date_added}')"
+        return f"Item('{self.item_name}', '{self.date_added}', '{self.user_id}')"
