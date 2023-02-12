@@ -105,7 +105,7 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('account.html', title="Account", image_file=image_file, form=form)
+    return render_template('account.html', title="Account", image_file=image_file, form=form, user=form.username.data)
 
 @app.route("/new", methods=['GET', 'POST'])
 @login_required
@@ -154,10 +154,18 @@ def delete_item(item_id):
     flash('Your item has been deleted!', 'success')
     return redirect(url_for('home'))
 
-
-# @app.route("/user/<str:username>")
-# def user_items(username):
-#     page = request.args.get('page', 1, type=int)
-#     user = User.query.filter_by(username=username).first_or_404()
-#     items = Item.query.order_by(Item.user_id.desc()).paginate(page=page, per_page=2)
-#     return render_template('home.html', items=items)
+@app.route("/user/<string:username>")
+def user_items(username):
+    page = request.args.get('page', 1, type=int)
+    userqueried = User.query.filter_by(username=username).first_or_404()
+    
+    # Can you refactor the home method's query producing 'itemspaginated' specifically how it gets its list of users whose display_pulbic is 'True' all within the Item Table?
+    # : users Item.user_id.in_(userstruelist)
+    #                   Change userstruelist, to a list of users that have 'display_public' as 'True'
+    # 'user', in line 164, is the backref variable to User table while queyring the Item table (see models)
+    items = Item.query\
+        .filter_by(user=userqueried)\
+        .order_by(Item.date_added.desc())\
+        .paginate(page=page, per_page=2)
+    
+    return render_template('user_items.html', items=items, user=userqueried)

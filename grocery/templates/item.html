@@ -5,7 +5,7 @@
         <img class="rounded-circle article-img" src="{{ url_for('static',filename='profile_pics/' + item.user.image_file)}}">
         <div class="media-body">
             <div class="article-metadata">
-                <a class="mr-2" href="#">{{ item.user.username }}</a>
+                <a class="mr-2" href="{{ url_for('user_items', username=item.user.username) }}">{{ item.user.username }}</a>
                 <small class="text-muted">{{ item.date_added.strftime("%Y-%m-%d") }}</small>
                 {% if item.user == current_user %}
                     <div>

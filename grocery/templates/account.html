@@ -3,10 +3,15 @@
     <div class="content-section">
         <div class="media">
             <img class="rounded-circle account-img" src="{{ image_file }}">
-            <!-- <div class="media-body"> -->
-                <h4 class="account-heading">{{ current_user.username }}</h4>
+            <div class="media-body">
+                <!-- Can you CHANGE username from text to url_for 'user_items.html'????????? -->
+                <h4 class="account-heading">
+                    <a herf="{{ url_for('user_items', username=user) }}">
+                    {{ current_user.username }}
+                    </a>
+                </h4>
                 <p class="text-secondary">{{ current_user.email }}</p>
-            <!-- </div> -->
+            </div>
         </div>
             <form method="POST" action="" enctype="multipart/form-data">
                 <!-- hidden_tag() adds a Cross Site Forgery (CSRF) token -->
