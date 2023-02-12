@@ -26,9 +26,14 @@ from flask_login import login_user, logout_user, current_user, login_required
 @app.route("/")
 @app.route("/home")
 def home():
+    userstrue = User.query.filter_by(display_public=True).all()
+    userstruelist = []
+    for i in userstrue:
+        userstruelist.append(i.id)
     page = request.args.get('page', 1, type=int)
-    items = Item.query.order_by(Item.user_id.desc()).paginate(page=page, per_page=2)
-    return render_template('home.html', items=items)
+    itemspaginated = Item.query.filter(Item.user_id.in_(userstruelist)).paginate(page=page, per_page=2)
+    # items = Item.query.order_by(Item.user_id.desc()).paginate(page=page, per_page=2)
+    return render_template('home.html', items=itemspaginated)
 
 @app.route("/about")
 def about():
@@ -148,3 +153,11 @@ def delete_item(item_id):
     db.session.commit()
     flash('Your item has been deleted!', 'success')
     return redirect(url_for('home'))
+
+
+# @app.route("/user/<str:username>")
+# def user_items(username):
+#     page = request.args.get('page', 1, type=int)
+#     user = User.query.filter_by(username=username).first_or_404()
+#     items = Item.query.order_by(Item.user_id.desc()).paginate(page=page, per_page=2)
+#     return render_template('home.html', items=items)
