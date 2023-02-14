@@ -2,10 +2,11 @@ import os
 import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
-from grocery import app, db, bcrypt
-from grocery.forms import RegistrationForm, LoginForm, UpdateAccountForm, NewItem
+from grocery import app, db, bcrypt, mail
+from grocery.forms import RegistrationForm, LoginForm, UpdateAccountForm, NewItem, RequestResetPasswordForm, ResetPasswordForm
 from grocery.models import User, Item
 from flask_login import login_user, logout_user, current_user, login_required
+from flask_mail import Message
 
 # items = [
 #     {
@@ -169,3 +170,56 @@ def user_items(username):
         .paginate(page=page, per_page=2)
     
     return render_template('user_items.html', items=items, user=userqueried)
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    
+    msg = Message('Password Reset Rquest', 
+        sender='noreply@demo.com', 
+        recipients=[user.email])
+
+    msg.body = f'''To reset your password, visit the following link:
+{url_for('reset_token', token=token, _external=True)}
+
+If you did NOT request, simply ignore this email
+'''
+    mail.send(msg)
+
+# TROUBELSHOOT Routes: Reset_Request, and Reset_Token see if resetting password works with:
+#   JWT: https://stackoverflow.com/questions/71292764/which-timed-jsonwebsignature-serializer-replacement-for-itsdangerous-is-better 
+#   itsdangerous JSOSerializer: tutorial used 
+@app.route("/reset_password", methods=["POST","GET"])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    form = RequestResetPasswordForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('email has been sent with reset token','info')
+        return redirect(url_for('login'))
+    return render_template('reset_request.html', title='Reset Pasword', form=form)
+
+@app.route("/reset_password/<token>", methods=["POST","GET"])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    user = User.verify_reset_token(token)
+    if user is None:
+            flash('That is an invalid or edpired token','warning')
+            return redirect(url_for('reset_request'))
+    elif user is False:
+            flash('That is not working','warning')
+            return redirect(url_for('reset_request'))
+        
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_pw
+        db.session.commit()
+        flash('Your password has been updated! You can now log in with new password!', 'success')
+        return redirect(url_for('login'))
+    return render_template('reset_token.html', title='Reset Pasword', form=form)
+
+
+    
