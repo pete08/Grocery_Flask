@@ -12,7 +12,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app) # pass app to bcrypt class to iniitalize bcrypt
 login_manager = LoginManager(app)
-login_manager.login_view = 'login'
+login_manager.login_view = 'usersappblueprint.login'
 login_manager.login_message_category = 'info'
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 587
@@ -21,7 +21,13 @@ app.config['MAIL_USERNAME'] = os.environ.get('EMAIL_USER')
 app.config['MAIL_PASSWORD'] = os.environ.get('EMAIL_PASS')
 mail = Mail(app)
 
-from grocery import routes
+from grocery.users.routes import usersappblueprint
+from grocery.items.routes import itemsappblueprint
+from grocery.main.routes import mainappblueprint
+
+app.register_blueprint(usersappblueprint)
+app.register_blueprint(itemsappblueprint)
+app.register_blueprint(mainappblueprint)
 
 
 # initialize DB

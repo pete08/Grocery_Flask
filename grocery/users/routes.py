@@ -11,7 +11,7 @@ usersappblueprint = Blueprint('usersappblueprint', __name__)
 @usersappblueprint.route("/register", methods=["POST","GET"])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('mainappblueprint.home'))
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_pw = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
@@ -19,13 +19,13 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {form.username.data}!', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('usersappblueprint.login'))
     return render_template('register.html', title="Registration", form=form)
 
 @usersappblueprint.route("/login", methods=["POST","GET"])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('mainappblueprint.home'))
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -33,7 +33,7 @@ def login():
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             flash('You\'ve been logged in!', 'success')
-            return redirect(next_page) if next_page else redirect(url_for('home'))
+            return redirect(next_page) if next_page else redirect(url_for('mainappblueprint.home'))
         else:
             flash('Login Unsuccessful. Plase check email and password', 'danger')
     return render_template('login.html', title="Log In", form=form)
@@ -42,7 +42,7 @@ def login():
 @usersappblueprint.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for('home'))
+    return redirect(url_for('mainappblueprint.home'))
 
 @usersappblueprint.route("/account", methods=["POST","GET"])
 @login_required
@@ -56,7 +56,7 @@ def account():
         current_user.email = form.email.data
         db.session.commit()
         flash('your account has been updated', 'success')
-        return redirect(url_for('account'))
+        return redirect(url_for('usersappblueprint.account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
@@ -86,26 +86,26 @@ def user_items(username):
 @usersappblueprint.route("/reset_password", methods=["POST","GET"])
 def reset_request():
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('mainappblueprint.home'))
     form = RequestResetPasswordForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         send_reset_email(user)
-        flash('email has been sent with reset token','info')
-        return redirect(url_for('login'))
+        flash('if user user exists, reset token has been sent','info')
+        return redirect(url_for('usersappblueprint.login'))
     return render_template('reset_request.html', title='Reset Pasword', form=form)
 
 @usersappblueprint.route("/reset_password/<token>", methods=["POST","GET"])
 def reset_token(token):
     if current_user.is_authenticated:
-        return redirect(url_for('home'))
+        return redirect(url_for('mainappblueprint.home'))
     user = User.verify_reset_token(token)
     if user is None:
-            flash('That is an invalid or edpired token','warning')
-            return redirect(url_for('reset_request'))
+            flash('Invalid or expired token','warning')
+            return redirect(url_for('usersappblueprint.reset_request'))
     elif user is False:
             flash('That is not working','warning')
-            return redirect(url_for('reset_request'))
+            return redirect(url_for('usersappblueprint.reset_request'))
         
     form = ResetPasswordForm()
     if form.validate_on_submit():
@@ -113,5 +113,5 @@ def reset_token(token):
         user.password = hashed_pw
         db.session.commit()
         flash('Your password has been updated! You can now log in with new password!', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('usersappblueprint.login'))
     return render_template('reset_token.html', title='Reset Pasword', form=form)

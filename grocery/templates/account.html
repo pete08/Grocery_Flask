@@ -6,7 +6,7 @@
             <div class="media-body">
                 <!-- Can you CHANGE username from text to url_for 'user_items.html'????????? -->
                 <h4 class="account-heading">
-                    <a herf="{{ url_for('user_items', username=user) }}">
+                    <a herf="{{ url_for('usersappblueprint.user_items', username=user) }}">
                     {{ current_user.username }}
                     </a>
                 </h4>

@@ -16,7 +16,7 @@ def new_item():
         db.session.add(post)
         db.session.commit()
         flash('Your item has been added!', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('mainappblueprint.home'))
     return render_template('new_item.html', title="New Item", form=form, legend='New Item')
 
 #Consider changing to entire list
@@ -37,7 +37,7 @@ def update_item(item_id):
         item.detail = form.detail.data
         db.session.commit()
         flash('Your item has been updated!', 'success')
-        return redirect(url_for('item', item_id=item.id))
+        return redirect(url_for('itemsappblueprint.item', item_id=item.id))
     elif request.method == 'GET':
         form.item_name.data = item.item_name
         form.detail.data = item.detail
@@ -52,4 +52,4 @@ def delete_item(item_id):
     db.session.delete(item)
     db.session.commit()
     flash('Your item has been deleted!', 'success')
-    return redirect(url_for('home'))
+    return redirect(url_for('mainappblueprint.home'))

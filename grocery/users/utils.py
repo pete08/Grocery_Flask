@@ -26,7 +26,7 @@ def send_reset_email(user):
         recipients=[user.email])
 
     msg.body = f'''To reset your password, visit the following link:
-{url_for('reset_token', token=token, _external=True)}
+{url_for('usersappblueprint.reset_token', token=token, _external=True)}
 
 If you did NOT request, simply ignore this email
 '''
