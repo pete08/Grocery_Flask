@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta, timezone
 # from itsdangerous import TimedJSONWebSignatureSerializer as Serializer #
 import jwt
-from grocery import db, login_manager, app
+from grocery import db, login_manager
+from flask import current_app
 from flask_login import UserMixin
 
 @login_manager.user_loader
@@ -17,24 +18,21 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     display_public = db.Column(db.Boolean, nullable=False, default=1)
     items = db.relationship('Item', backref='user', lazy=True)
-
-    # def get_reset_token(self, expires_sec=1800): #
-    #     s = Serializer(app.config['SECRET_KEY'], expires_sec) #
-    #     return s.dumps({'user_id': self.id,}).decode('utf-8') #
+    
     def get_reset_token(self, expiration=600):
         reset_token = jwt.encode(
             {
                 "user_id": self.id,
                 "exp": datetime.now(tz=timezone.utc) + timedelta(seconds=expiration)
             },
-            app.config['SECRET_KEY'],
+            current_app.config['SECRET_KEY'],
             algorithm="HS256"
         )
         return reset_token
 
     # @staticmethod
     # def verify_reset_token(token): #
-    #     s = Serializer(app.config['SECRET_KEY']) #
+    #     s = Serializer(current_app.config['SECRET_KEY']) #
     #     try: #
     #         user_id = s.loads(token)['user_id'] #
     #     except: #
@@ -46,7 +44,7 @@ class User(db.Model, UserMixin):
             # HERE: See what jwt.decode outputs!
             data = jwt.decode(
                 token,
-                app.config['SECRET_KEY'],
+                current_app.config['SECRET_KEY'],
                 leeway=timedelta(seconds=10),
                 algorithms=["HS256"])
         except:
