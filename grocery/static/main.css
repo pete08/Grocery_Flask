@@ -31,6 +31,19 @@ body {
     border-radius: 3px;
     margin-bottom: 20px;
   }
+
+  .listed-content-section {
+    background: #ffffff;
+    padding: 5px 30px;
+    border: 1px hidden #dddddd;
+    /* border-radius: 3px; */
+    /* margin-bottom: 1px; */
+  }
+
+  .display-none {
+    display: none;
+  }
+  
   
   .article-title {
     color: #444444;

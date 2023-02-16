@@ -4,16 +4,19 @@
     {% for item in items %}
       <!-- {% if item != items[0] %} -->
         <article class="media content-section">
-            <img class="rounded-circle article-img" src="{{ url_for('static',filename='profile_pics/' + item.user.image_file)}}">
+          {% if user_pics_used.count(item.user_id) == 0 %}  
+              <img class="rounded-circle article-img" src="{{ url_for('static',filename='profile_pics/' + item.user.image_file)}}">
             <div class="article-metadata">
               <a class="mr-2" href="{{ url_for('usersappblueprint.user_items', username=item.user.username) }}">{{ item.user.username }}</a>
-              <small class="text-muted">{{ item.date_added.strftime("%Y-%m-%d") }}</small>
             </div>
-        <div class="media-body">
-          <h2><a class="article-title" href="{{url_for('itemsappblueprint.item', item_id=item.id)}}">{{ item.item_name }}</a></h2>
-          <p class="article-content">{{ item.detail }}</p>
-        </div>
+            <div class="rgrp" style="visibility:hidden">{{ user_pics_used.append(item.user_id) }}</div>
+          {% endif %}
         </article>
+        <div class="listed-content-section">
+          <span><a class="article-title" href="{{url_for('itemsappblueprint.item', item_id=item.id)}}">{{ item.item_name }}</a>
+          <small class="text-muted">{{ item.date_added.strftime("%Y-%m-%d") }}</small></span>
+          <p>{{ item.detail }}</p>
+        </div>
       <!-- {% else %}
           <div class="media-body">
             <h2><a class="article-title" href="{{url_for('itemsappblueprint.item', item_id=item.id)}}">{{ item.item_name }}</a></h2>
