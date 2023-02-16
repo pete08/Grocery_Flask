@@ -74,4 +74,4 @@ class Item(db.Model):
 
     # REPR method
     def __repr__(self):
-        return f"Item('{self.item_name}', '{self.date_added}', '{self.user_id}')"
+        return f"Item('{self.item_name}', '{self.date_added}', '{self.detail}', '{self.user_id}')"

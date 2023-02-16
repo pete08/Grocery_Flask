@@ -16,12 +16,12 @@ class RegistrationForm(FlaskForm):
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user:
-            raise ValidationError(message='Username already exists, please choose different username.')
+            raise ValidationError(message='Choose different username.')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
-            raise ValidationError(message='user with that email already exists, please choose different email.')
+            raise ValidationError(message='Select different different email.')
 
 
 class LoginForm(FlaskForm):
@@ -35,19 +35,20 @@ class UpdateAccountForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     picture = FileField('Update Profile Pic', validators=[FileAllowed(['jpg','png'])])
+    display_public = BooleanField('Display List Publically')
     submit = SubmitField('Update Account')
 
     def validate_username(self, username):
         if username.data != current_user.username:
             user = User.query.filter_by(username=username.data).first()
             if user:
-                raise ValidationError(message='Username already exists, please choose different username.')
+                raise ValidationError(message='select different username.')
 
     def validate_email(self, email):
         if email.data != current_user.email:
             user = User.query.filter_by(email=email.data).first()
             if user:
-                raise ValidationError(message='user with that email already exists, please choose different email.')
+                raise ValidationError(message='Select different different email.')
 
 class RequestResetPasswordForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -56,7 +57,7 @@ class RequestResetPasswordForm(FlaskForm):
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user is None:
-            raise ValidationError(message='No account with that email. You must register first.')
+            raise ValidationError(message='You must register to login.')
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])

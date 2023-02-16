@@ -28,9 +28,11 @@ def create_app(config_class=Config):
     from grocery.users.routes import usersappblueprint
     from grocery.items.routes import itemsappblueprint
     from grocery.main.routes import mainappblueprint
+    from grocery.errors.handlers import errorappblueprint
     app.register_blueprint(usersappblueprint)
     app.register_blueprint(itemsappblueprint)
     app.register_blueprint(mainappblueprint)
+    app.register_blueprint(errorappblueprint)
 
     return app
 

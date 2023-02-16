@@ -54,12 +54,14 @@ def account():
             current_user.image_file = picture_file
         current_user.username = form.username.data
         current_user.email = form.email.data
+        current_user.display_public = form.display_public.data
         db.session.commit()
         flash('your account has been updated', 'success')
         return redirect(url_for('usersappblueprint.account'))
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
+        form.display_public.data = current_user.display_public
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title="Account", image_file=image_file, form=form, user=form.username.data)
 

@@ -5,13 +5,13 @@
             <img class="rounded-circle account-img" src="{{ image_file }}">
             <div class="media-body">
                 <!-- Can you CHANGE username from text to url_for 'user_items.html'????????? -->
-                <h4 class="account-heading">
-                    <a herf="{{ url_for('usersappblueprint.user_items', username=user) }}">
+                <h2 class="account-heading">
+                    <a herf="{{ url_for('usersappblueprint.user_items', username=current_user.username) }}">
                     {{ current_user.username }}
                     </a>
-                </h4>
-                <p class="text-secondary">{{ current_user.email }}</p>
+                </h2>
             </div>
+            <p class="text-secondary">{{ current_user.email }}: <a class="mr-2" href="{{ url_for('usersappblueprint.user_items', username=current_user.username) }}">Your List!</a></p>
         </div>
             <form method="POST" action="" enctype="multipart/form-data">
                 <!-- hidden_tag() adds a Cross Site Forgery (CSRF) token -->
@@ -22,11 +22,11 @@
                         {{ form.username.label(class="form-control-label") }}
                         {% if form.username.errors %}
                             {{ form.username(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for errors in form.username.errors %}
-                                    <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
+                                <div class="invalid-feedback">
+                                    {% for errors in form.username.errors %}
+                                        <span>{{ error }}</span>
+                                    {% endfor %}
+                                </div>
                         {% else %}
                             {{ form.username(class="form-control form-control-lg") }}
                         {% endif %}
@@ -43,6 +43,10 @@
                     {% else %}
                         {{ form.email(class="form-control form-control-lg") }}
                     {% endif %}
+                    </div>
+                    <div class="form-check">
+                        {{ form.display_public.label(class="form-check-label")}}
+                        {{ form.display_public(class="form-check-input")}}
                     </div> 
                     <div class="form-group">
                         {{ form.picture.label() }}
