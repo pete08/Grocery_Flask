@@ -1,35 +1,42 @@
 {% extends "layout.html" %}
 
 {% block content %}
-    {% for item in items %}
-      <!-- {% if item != items[0] %} -->
-        <article class="media content-section">
-          {% if user_pics_used.count(item.user_id) == 0 %}  
-              <img class="rounded-circle article-img" src="{{ url_for('static',filename='profile_pics/' + item.user.image_file)}}">
-            <div class="article-metadata">
-              <a class="mr-2" href="{{ url_for('usersappblueprint.user_items', username=item.user.username) }}">{{ item.user.username }}</a>
+    <article class="media content-section">
+      {% for item in items %}
+        <!-- {% if item != items[0] %} -->
+
+            {% if user_pics_used.count(item.user_id) == 0 %}  
+              <span><img class="rounded-circle article-img mb-3" src="{{ url_for('static',filename='profile_pics/' + item.user.image_file)}}">
+              <a class="mr-2" href="{{ url_for('usersappblueprint.user_items', username=item.user.username) }}">{{ item.user.username }}</a></span>
+              
+              <!-- <div class="rgrp" style="visibility:hidden">{{ user_pics_used.append(item.user_id) }}</div> -->
+            {% endif %}
+            <!-- </article> -->
+            <!-- FIX to empty box beneath each item when listed on home.html -->
+            <div class="listed-content-section">
+              <!-- <SPAN STYLE="font-size:18.0pt"><a class="article-title" href="{{url_for('itemsappblueprint.item', item_id=item.id)}}">{{ item.item_name }}</a></SPAN>
+              <small class="text-muted">{{ item.date_added.strftime("%Y-%m-%d") }}</small>
+              <p>{{ item.detail }}</p> -->
+              <dl class="row">
+                <dt class="col-sm-2 text-truncate"><a class="article-title" href="{{url_for('itemsappblueprint.item', item_id=item.id)}}">{{ item.item_name }}</a></dt>
+                <dd class="col-sm-10">{{ item.detail }}</dd>
+              </dl>
             </div>
-            <div class="rgrp" style="visibility:hidden">{{ user_pics_used.append(item.user_id) }}</div>
-          {% endif %}
-        </article>
-        <div class="listed-content-section">
-          <span><a class="article-title" href="{{url_for('itemsappblueprint.item', item_id=item.id)}}">{{ item.item_name }}</a>
-          <small class="text-muted">{{ item.date_added.strftime("%Y-%m-%d") }}</small></span>
-          <p>{{ item.detail }}</p>
-        </div>
-      <!-- {% else %}
-          <div class="media-body">
-            <h2><a class="article-title" href="{{url_for('itemsappblueprint.item', item_id=item.id)}}">{{ item.item_name }}</a></h2>
-            <p class="article-content">{{ item.detail }}</p>
-          </div>
-      {% endif %} -->
-    {% endfor %}
+
+        <!-- {% else %}
+            <div class="media-body">
+              <h2><a class="article-title" href="{{url_for('itemsappblueprint.item', item_id=item.id)}}">{{ item.item_name }}</a></h2>
+              <p class="article-content">{{ item.detail }}</p>
+            </div>
+        {% endif %} -->
+      {% endfor %}
+    </article>
     {% for page_num in items.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=1) %}
       {% if page_num %}
         {% if page_num == items.page%}
-          <a class="btn btn-info mb-4" href="{{ url_for('mainappblueprint.home', page=page_num) }}">{{ page_num }}</a>
+          <a class="btn btn-info mt-4 mb-4" href="{{ url_for('mainappblueprint.home', page=page_num) }}">{{ page_num }}</a>
         {% else %}
-          <a class="btn btn-outline-info mb-4" href="{{ url_for('mainappblueprint.home', page=page_num) }}">{{ page_num }}</a>
+          <a class="btn btn-outline-info mt-4 mb-4" href="{{ url_for('mainappblueprint.home', page=page_num) }}">{{ page_num }}</a>
         {% endif %}
       {% else %}
       ...

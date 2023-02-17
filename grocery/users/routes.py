@@ -78,7 +78,7 @@ def user_items(username):
     items = Item.query\
         .filter_by(user=userqueried)\
         .order_by(Item.date_added.desc())\
-        .paginate(page=page, per_page=2)
+        .paginate(page=page, per_page=10)
     
     return render_template('user_items.html', items=items, user=userqueried)
 

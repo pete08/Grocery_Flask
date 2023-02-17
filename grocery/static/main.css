@@ -29,15 +29,26 @@ body {
     padding: 10px 20px;
     border: 1px solid #dddddd;
     border-radius: 3px;
-    margin-bottom: 20px;
+    margin-bottom: 1px;
   }
 
   .listed-content-section {
+    padding-left: 20px;
     background: #ffffff;
-    padding: 5px 30px;
-    border: 1px hidden #dddddd;
-    /* border-radius: 3px; */
+    /* padding: 2px 30px; */
+    border: 1px solid #dddddd;
+    border-radius: 3px;
     /* margin-bottom: 1px; */
+  }
+
+  div.a {
+    position: absolute;
+    width: 90%;
+    right: 5%;
+    height: 80%;
+    border: 3px solid red;
+    padding:10px 1px 10px 10px;
+    
   }
 
   .display-none {
@@ -47,6 +58,7 @@ body {
   
   .article-title {
     color: #444444;
+    font-size: 2rem;
   }
   
   a.article-title:hover {
@@ -62,6 +74,7 @@ body {
     height: 65px;
     width: 65px;
     margin-right: 16px;
+    margin-top: 10px;
   }
   
   .article-metadata {

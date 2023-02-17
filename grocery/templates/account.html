@@ -2,15 +2,14 @@
 {% block content %}
     <div class="content-section">
         <div class="media">
-            <img class="rounded-circle account-img" src="{{ image_file }}">
             <div class="media-body">
-                <h2 class="account-heading">
+                <!-- Can you CHANGE username from text to url_for 'user_items.html'????????? -->
+                    <img class="rounded-circle account-img" style="float:left" src="{{ image_file }}">
                     <a herf="{{ url_for('usersappblueprint.user_items', username=current_user.username) }}">
                     </a>
                     <div class="display-none">{{ current_user.username }}</div>
-                </h2>
+                    <p class="text-secondary">{{ current_user.email }}: <a class="mr-2" href="{{ url_for('usersappblueprint.user_items', username=current_user.username) }}">Your List!</a></p>
             </div>
-            <p class="text-secondary">{{ current_user.email }}: <a class="mr-2" href="{{ url_for('usersappblueprint.user_items', username=current_user.username) }}">Your List!</a></p>
         </div>
             <form method="POST" action="" enctype="multipart/form-data">
                 <!-- hidden_tag() adds a Cross Site Forgery (CSRF) token -->
